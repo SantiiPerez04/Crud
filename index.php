@@ -1,7 +1,6 @@
 <?php
-include('db.php');
-
-// Obtener todos los juegos
+include('conn.php');
+// Consultar todos los juegos de la base de datos
 $query = $connect->query("SELECT * FROM juegos");
 $juegos = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -15,10 +14,10 @@ $juegos = $query->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Formulario para agregar juegos -->
     <div class="container mt-5">
-        <h1>XJuegos</h1>
+        <h1>Juegos</h1>
         
-        <!-- Formulario para agregar juegos -->
         <form action="agregar.php" method="POST" class="mb-3">
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre:</label>
@@ -30,8 +29,7 @@ $juegos = $query->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <button type="submit" class="btn btn-primary">Agregar Juego</button>
         </form>
-
-        <!-- Tabla de juegos -->
+    <!-- Tabla que muestra los juegos -->   
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -48,8 +46,16 @@ $juegos = $query->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo $juego['nombre']; ?></td>
                         <td><?php echo $juego['cantidad']; ?></td>
                         <td>
-                            <a href="editar.php?id=<?php echo $juego['id']; ?>" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="eliminar.php?id=<?php echo $juego['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este juego?');">Eliminar</a>
+                        <!-- Formulario para editar el juego -->
+                            <form action="modificar.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="id" value="<?php echo $juego['id']; ?>">
+                                <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                            </form>
+                         <!-- Formulario para eliminar el juego -->
+                            <form action="eliminar.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="id" value="<?php echo $juego['id']; ?>">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este juego?');">Eliminar</button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>
